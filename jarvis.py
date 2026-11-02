@@ -34,3 +34,15 @@ def run_trading_loop():
 
 if __name__ == "__main__":
     run_trading_loop()
+import os
+from http.server import HTTPServer, BaseHTTPRequestHandler
+
+class HealthCheckHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"OK")
+
+port = int(os.environ.get("PORT", 10000))
+server = HTTPServer(("0.0.0.0", port), HealthCheckHandler)
+server.serve_forever()
